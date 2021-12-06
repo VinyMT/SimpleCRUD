@@ -9,6 +9,8 @@ import javax.swing.JTextField;
 
 import model.dao.DaoFactory;
 import model.dao.SellerDAO;
+import model.entities.Department;
+import model.entities.Seller;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -18,6 +20,11 @@ public class CRUDView {
 
 	private JFrame frame;
 	private JTextField tfID;
+	private JLabel departmentIDLabel;
+	private JTextField tfIdDepartment;
+	private JButton btnSearch2;
+	private JTextField tfNameDepartment;
+	private JLabel nameDepatmentLbl;
 
 	/**
 	 * Launch the application.
@@ -60,14 +67,49 @@ public class CRUDView {
 		frame.getContentPane().add(tfID);
 		tfID.setColumns(10);
 		
-		JButton btnNewButton = new JButton("Pesquisar");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnSearch = new JButton("Pesquisar");
+		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SellerDAO dao = DaoFactory.createSellerDAO();
 				JOptionPane.showMessageDialog(null, dao.findByID(Integer.parseInt(tfID.getText())));
 			}
 		});
-		btnNewButton.setBounds(141, 20, 89, 23);
-		frame.getContentPane().add(btnNewButton);
+		btnSearch.setBounds(141, 20, 89, 23);
+		frame.getContentPane().add(btnSearch);
+		
+		departmentIDLabel = new JLabel("ID do departamento:");
+		departmentIDLabel.setBounds(360, 24, 119, 14);
+		frame.getContentPane().add(departmentIDLabel);
+		
+		tfIdDepartment = new JTextField();
+		tfIdDepartment.setBounds(493, 21, 86, 20);
+		frame.getContentPane().add(tfIdDepartment);
+		tfIdDepartment.setColumns(10);
+		
+		btnSearch2 = new JButton("Pesquisar");
+		btnSearch2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SellerDAO dao = DaoFactory.createSellerDAO();
+				Department dep = new Department(Integer.parseInt(tfIdDepartment.getText()), tfNameDepartment.getText());
+				String sellers = "Sellers: ";
+				
+				for(Seller s : dao.findByDepartment(dep)) {
+					sellers += "\n-> " + s.toString();
+				}
+				
+				JOptionPane.showMessageDialog(null, sellers);
+			}
+		});
+		btnSearch2.setBounds(589, 34, 89, 23);
+		frame.getContentPane().add(btnSearch2);
+		
+		tfNameDepartment = new JTextField();
+		tfNameDepartment.setBounds(493, 52, 86, 20);
+		frame.getContentPane().add(tfNameDepartment);
+		tfNameDepartment.setColumns(10);
+		
+		nameDepatmentLbl = new JLabel("Nome do departamento:");
+		nameDepatmentLbl.setBounds(357, 55, 126, 14);
+		frame.getContentPane().add(nameDepatmentLbl);
 	}
 }
