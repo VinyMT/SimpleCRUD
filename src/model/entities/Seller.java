@@ -30,10 +30,6 @@ public class Seller implements Serializable {
 	}
 
 	public void setId(Integer id) {
-		if(id < 0 || id == null) {
-			throw new IllegalArgumentException("ID invalido");
-		}
-		
 		this.id = id;
 	}
 
