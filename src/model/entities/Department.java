@@ -32,11 +32,7 @@ public class Department implements Serializable{
 		return name;
 	}
 	
-	public void setName(String name) {
-		if(name.isEmpty() || name == null) {
-			throw new IllegalArgumentException("Nome de departamento invalido!");
-		}
-		
+	public void setName(String name) {		
 		this.name = name;
 	}
 
