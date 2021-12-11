@@ -32,6 +32,13 @@ public class CRUDView {
 	private JTextField tfBaseSalary;
 	private JTextField tfIdDepartmentAdd;
 	private JTextField tfNameDepartment;
+	private JTextField tfId2;
+	private JTextField tfName2;
+	private JTextField tfEmail2;
+	private JTextField tfBirthDate2;
+	private JTextField tfBaseSalary2;
+	private JTextField tfIdDepartment3;
+	private JTextField tfNameDepartment2;
 
 	/**
 	 * Launch the application.
@@ -64,162 +71,296 @@ public class CRUDView {
 		frame.setBounds(100, 100, 660, 367);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(0, 0, 644, 328);
 		frame.getContentPane().add(tabbedPane);
-		
+
 		JPanel panel = new JPanel();
 		tabbedPane.addTab("Consultar Vendedores", null, panel, null);
 		panel.setLayout(null);
 		JPanel panel2 = new JPanel();
 		tabbedPane.addTab("Adicionar Vendedores", null, panel2, null);
 		panel2.setLayout(null);
-		
+		JPanel panel3 = new JPanel();
+		tabbedPane.addTab("Atualizar Vendedores", null, panel3, null);
+		panel3.setLayout(null);
+
+		JLabel lblId = new JLabel("ID:");
+		lblId.setBounds(10, 11, 46, 14);
+		panel3.add(lblId);
+
+		tfId2 = new JTextField();
+		tfId2.setBounds(43, 8, 279, 20);
+		panel3.add(tfId2);
+		tfId2.setColumns(10);
+
+		tfName2 = new JTextField();
+		tfName2.setColumns(10);
+		tfName2.setBounds(66, 39, 257, 20);
+		panel3.add(tfName2);
+
+		tfEmail2 = new JTextField();
+		tfEmail2.setColumns(10);
+		tfEmail2.setBounds(66, 70, 257, 20);
+		panel3.add(tfEmail2);
+
+		tfBirthDate2 = new JTextField();
+		tfBirthDate2.setColumns(10);
+		tfBirthDate2.setBounds(147, 101, 176, 20);
+		panel3.add(tfBirthDate2);
+
+		tfBaseSalary2 = new JTextField();
+		tfBaseSalary2.setColumns(10);
+		tfBaseSalary2.setBounds(101, 129, 222, 20);
+		panel3.add(tfBaseSalary2);
+
+		tfIdDepartment3 = new JTextField();
+		tfIdDepartment3.setColumns(10);
+		tfIdDepartment3.setBounds(132, 157, 191, 20);
+		panel3.add(tfIdDepartment3);
+
+		tfNameDepartment2 = new JTextField();
+		tfNameDepartment2.setColumns(10);
+		tfNameDepartment2.setBounds(160, 188, 163, 20);
+		panel3.add(tfNameDepartment2);
+
+		JLabel lblNameDepartment_1 = new JLabel("Nome do departamento:");
+		lblNameDepartment_1.setBounds(10, 191, 145, 14);
+		panel3.add(lblNameDepartment_1);
+
+		JLabel lblIdDepartment_1 = new JLabel("ID do departemento:");
+		lblIdDepartment_1.setBounds(10, 160, 124, 14);
+		panel3.add(lblIdDepartment_1);
+
+		JLabel lblBaseSalary_1 = new JLabel("Sal\u00E1rio Base:");
+		lblBaseSalary_1.setBounds(10, 132, 115, 14);
+		panel3.add(lblBaseSalary_1);
+
+		JLabel lblBirthDate_1 = new JLabel("Data de Nascimento:");
+		lblBirthDate_1.setBounds(10, 104, 127, 14);
+		panel3.add(lblBirthDate_1);
+
+		JLabel lblEmail_1 = new JLabel("Email:");
+		lblEmail_1.setBounds(10, 73, 46, 14);
+		panel3.add(lblEmail_1);
+
+		JLabel lblName_1 = new JLabel("Nome:");
+		lblName_1.setBounds(10, 42, 46, 14);
+		panel3.add(lblName_1);
+
+		JButton btnUpdate = new JButton("Atualizar Dados");
+		btnUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					SellerDAO dao = DaoFactory.createSellerDAO();
+					Seller s = dao.findByID(Integer.parseInt(tfId2.getText()));
+
+					if (tfName2.getText().isEmpty() && tfEmail2.getText().isEmpty() && tfBirthDate2.getText().isEmpty()
+							&& tfBaseSalary2.getText().isEmpty() && tfIdDepartment3.getText().isEmpty()
+							&& tfNameDepartment2.getText().isEmpty()) {
+						JOptionPane.showMessageDialog(null,
+								"Erro! Preencha pelo menos um campo que não seja o id para atualizar.");
+					} else {
+						if (!tfName2.getText().isEmpty()) {
+							s.setName(tfName2.getText());
+						}
+						if (!tfEmail2.getText().isEmpty()) {
+							s.setEmail(tfEmail2.getText());
+						}
+						if (!tfBirthDate2.getText().isEmpty()) {
+							SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+							s.setBirthDate(sdf.parse(tfBirthDate2.getText()));
+						}
+						if (!tfBaseSalary2.getText().isEmpty()) {
+							s.setBaseSalary(Double.parseDouble(tfBaseSalary2.getText()));
+						}
+						if (!tfIdDepartment3.getText().isEmpty() && !tfNameDepartment2.getText().isEmpty()) {
+							s.setDepartment(new Department(Integer.parseInt(tfIdDepartment3.getText()),
+									tfNameDepartment2.getText()));
+							;
+						} else {
+							if (tfIdDepartment3.getText().isEmpty() && tfNameDepartment2.getText().isEmpty()) {
+								// não faz nada
+							} else {
+								JOptionPane.showMessageDialog(null,
+										"Erro! É preciso completar o Id e o Nome do departamento para poder atualiza-lo.");
+							}
+						}
+						
+						dao.update(s);
+						
+						JOptionPane.showMessageDialog(null,
+								"Dados atualizados!");
+					}
+				} catch (IllegalArgumentException | ParseException ex) {
+					JOptionPane.showMessageDialog(null, ex.getMessage());
+				}
+			}
+		});
+		btnUpdate.setBounds(20, 237, 128, 36);
+		panel3.add(btnUpdate);
+		panel2.setLayout(null);
+
 		tfName = new JTextField();
 		tfName.setBounds(66, 11, 257, 20);
 		panel2.add(tfName);
 		tfName.setColumns(10);
-		
+
 		JLabel lblName = new JLabel("Nome:");
 		lblName.setBounds(10, 14, 46, 14);
 		panel2.add(lblName);
-		
+
 		tfEmail = new JTextField();
 		tfEmail.setBounds(66, 42, 257, 20);
 		panel2.add(tfEmail);
 		tfEmail.setColumns(10);
-		
+
 		JLabel lblEmail = new JLabel("Email:");
 		lblEmail.setBounds(10, 45, 46, 14);
 		panel2.add(lblEmail);
-		
+
 		JLabel lblBirthDate = new JLabel("Data de Nascimento:");
 		lblBirthDate.setBounds(10, 76, 127, 14);
 		panel2.add(lblBirthDate);
-		
+
 		tfBirthDate = new JTextField();
 		tfBirthDate.setColumns(10);
 		tfBirthDate.setBounds(147, 73, 176, 20);
 		panel2.add(tfBirthDate);
-		
+
 		JLabel lblBaseSalary = new JLabel("Sal\u00E1rio Base:");
 		lblBaseSalary.setBounds(10, 104, 115, 14);
 		panel2.add(lblBaseSalary);
-		
+
 		tfBaseSalary = new JTextField();
 		tfBaseSalary.setBounds(101, 101, 222, 20);
 		panel2.add(tfBaseSalary);
 		tfBaseSalary.setColumns(10);
-		
+
 		tfIdDepartmentAdd = new JTextField();
 		tfIdDepartmentAdd.setBounds(132, 129, 191, 20);
 		panel2.add(tfIdDepartmentAdd);
 		tfIdDepartmentAdd.setColumns(10);
-		
+
 		JLabel lblIdDepartment = new JLabel("ID do departemento:");
 		lblIdDepartment.setBounds(10, 132, 124, 14);
 		panel2.add(lblIdDepartment);
-		
+
 		tfNameDepartment = new JTextField();
 		tfNameDepartment.setBounds(160, 160, 163, 20);
 		panel2.add(tfNameDepartment);
 		tfNameDepartment.setColumns(10);
-		
+
 		JLabel lblNameDepartment = new JLabel("Nome do departamento:");
 		lblNameDepartment.setBounds(10, 163, 145, 14);
 		panel2.add(lblNameDepartment);
-		
+
 		JButton btnNewButton = new JButton("Inserir");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Department dep = new Department(Integer.parseInt(tfIdDepartmentAdd.getText()), tfNameDepartment.getText());
-				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-				SellerDAO dao = DaoFactory.createSellerDAO();
 				try {
-					Seller seller = new Seller(null, tfName.getText(), tfEmail.getText(), sdf.parse(tfBirthDate.getText()), Double.parseDouble(tfBaseSalary.getText()), dep);
+					Department dep = new Department(Integer.parseInt(tfIdDepartmentAdd.getText()),
+							tfNameDepartment.getText());
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+					SellerDAO dao = DaoFactory.createSellerDAO();
+					Seller seller = new Seller(null, tfName.getText(), tfEmail.getText(),
+							sdf.parse(tfBirthDate.getText()), Double.parseDouble(tfBaseSalary.getText()), dep);
 					dao.insert(seller);
-				} catch (NumberFormatException | ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Vendedor adicionado com sucesso!");
+				} catch (IllegalArgumentException | ParseException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage());
 				}
-				
+
 			}
 		});
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnNewButton.setBounds(101, 213, 152, 50);
 		panel2.add(btnNewButton);
 		panel.setLayout(null);
-		
+
 		JButton btnFindAll = new JButton("Mostrar todos");
 		btnFindAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SellerDAO dao = DaoFactory.createSellerDAO();
-				String sellers = "Sellers: ";
-				
-				if(!dao.findAll().isEmpty()) {
-					for(Seller s : dao.findAll()) {
-						sellers += "\n-> " + s;
+				try {
+					SellerDAO dao = DaoFactory.createSellerDAO();
+					String sellers = "Sellers: ";
+
+					if (!dao.findAll().isEmpty()) {
+						for (Seller s : dao.findAll()) {
+							sellers += "\n-> " + s;
+						}
+
+						JOptionPane.showMessageDialog(null, sellers);
+					} else {
+						JOptionPane.showMessageDialog(null, "Nenhum vendedor encontrado!");
 					}
-					
-					JOptionPane.showMessageDialog(null, sellers);
-				} else {
-					JOptionPane.showMessageDialog(null, "Nenhum vendedor encontrado!");
+				} catch (IllegalArgumentException ex) {
+					JOptionPane.showMessageDialog(null, ex.getMessage());
 				}
 			}
 		});
 		btnFindAll.setBounds(24, 91, 119, 48);
 		panel.add(btnFindAll);
-		
+
 		JButton btnSearch = new JButton("Pesquisar");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SellerDAO dao = DaoFactory.createSellerDAO();
-				Seller seller = dao.findByID(Integer.parseInt(tfID.getText()));
-				if(seller != null) {
-					JOptionPane.showMessageDialog(null, seller);
-				} else {
-					JOptionPane.showMessageDialog(null, "Nenhum vendedor encontrado!");
+				try {
+					SellerDAO dao = DaoFactory.createSellerDAO();
+					Seller seller = dao.findByID(Integer.parseInt(tfID.getText()));
+					if (seller != null) {
+						JOptionPane.showMessageDialog(null, seller);
+					} else {
+						JOptionPane.showMessageDialog(null, "Nenhum vendedor encontrado!");
+					}
+				} catch (IllegalArgumentException ex) {
+					JOptionPane.showMessageDialog(null, ex.getMessage());
 				}
 			}
 		});
 		btnSearch.setBounds(162, 11, 105, 23);
 		panel.add(btnSearch);
-		
+
 		tfID = new JTextField();
 		tfID.setColumns(10);
 		tfID.setBounds(49, 12, 98, 20);
 		panel.add(tfID);
-		
+
 		JLabel IDlabel = new JLabel("ID:");
 		IDlabel.setBounds(24, 15, 27, 14);
 		panel.add(IDlabel);
-		
+
 		JLabel departmentIDLabel = new JLabel("ID do departamento:");
 		departmentIDLabel.setBounds(24, 54, 119, 14);
 		panel.add(departmentIDLabel);
-		
+
 		tfIdDepartment = new JTextField();
 		tfIdDepartment.setColumns(10);
 		tfIdDepartment.setBounds(152, 51, 98, 20);
 		panel.add(tfIdDepartment);
-		
+
 		JButton btnSearch2 = new JButton("Pesquisar");
 		btnSearch2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SellerDAO dao = DaoFactory.createSellerDAO();
-				Department dep = new Department(Integer.parseInt(tfIdDepartment.getText()), null);
-				String sellers = "Sellers: ";
-				
-				if(!dao.findByDepartment(dep).isEmpty()) {
-					for(Seller s : dao.findByDepartment(dep)) {
-						sellers += "\n-> " + s;
+				try {
+					SellerDAO dao = DaoFactory.createSellerDAO();
+					Department dep = new Department(Integer.parseInt(tfIdDepartment.getText()), null);
+					String sellers = "Sellers: ";
+
+					if (!dao.findByDepartment(dep).isEmpty()) {
+						for (Seller s : dao.findByDepartment(dep)) {
+							sellers += "\n-> " + s;
+						}
+
+						JOptionPane.showMessageDialog(null, sellers);
+					} else {
+						JOptionPane.showMessageDialog(null, "Nenhum vendedor encontrado!");
 					}
-					
-					JOptionPane.showMessageDialog(null, sellers);
-				} else {
-					JOptionPane.showMessageDialog(null, "Nenhum vendedor encontrado!");
+				} catch (IllegalArgumentException ex) {
+					JOptionPane.showMessageDialog(null, ex.getMessage());
 				}
+
 			}
 		});
 		btnSearch2.setBounds(260, 50, 105, 23);

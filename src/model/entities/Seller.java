@@ -38,7 +38,7 @@ public class Seller implements Serializable {
 	}
 
 	public void setName(String name) {
-		if(name.isEmpty() || name == null) {
+		if(name == null) {
 			throw new IllegalArgumentException("Nome invalido");
 		}
 		
