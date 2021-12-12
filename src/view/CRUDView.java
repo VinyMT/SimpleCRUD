@@ -39,6 +39,7 @@ public class CRUDView {
 	private JTextField tfBaseSalary2;
 	private JTextField tfIdDepartment3;
 	private JTextField tfNameDepartment2;
+	private JTextField tfId3;
 
 	/**
 	 * Launch the application.
@@ -84,6 +85,30 @@ public class CRUDView {
 		panel2.setLayout(null);
 		JPanel panel3 = new JPanel();
 		tabbedPane.addTab("Atualizar Vendedores", null, panel3, null);
+		panel3.setLayout(null);
+		JPanel panel4 = new JPanel();
+		tabbedPane.addTab("Deletar Vendedores", null, panel4, null);
+		panel4.setLayout(null);
+		
+		tfId3 = new JTextField();
+		tfId3.setBounds(43, 11, 105, 20);
+		panel4.add(tfId3);
+		tfId3.setColumns(10);
+		
+		JLabel lblId2 = new JLabel("ID:");
+		lblId2.setBounds(10, 14, 30, 14);
+		panel4.add(lblId2);
+		
+		JButton btnDelete = new JButton("Deletar");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SellerDAO dao = DaoFactory.createSellerDAO();
+				dao.deleteByID(Integer.parseInt(tfId3.getText()));
+				JOptionPane.showMessageDialog(null, "Vendedor deletado com sucesso!");
+			}
+		});
+		btnDelete.setBounds(174, 10, 89, 23);
+		panel4.add(btnDelete);
 		panel3.setLayout(null);
 
 		JLabel lblId = new JLabel("ID:");
