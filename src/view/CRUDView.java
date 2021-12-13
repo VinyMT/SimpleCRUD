@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import model.dao.DaoFactory;
+import model.dao.DepartmentDAO;
 import model.dao.SellerDAO;
 import model.entities.Department;
 import model.entities.Seller;
@@ -40,6 +41,9 @@ public class CRUDView {
 	private JTextField tfIdDepartment3;
 	private JTextField tfNameDepartment2;
 	private JTextField tfId3;
+	private JTextField tfNameDepartment3;
+	private JTextField tfNameDepartment4;
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -69,12 +73,12 @@ public class CRUDView {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 660, 367);
+		frame.setBounds(100, 100, 662, 514);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 644, 328);
+		tabbedPane.setBounds(0, 0, 646, 475);
 		frame.getContentPane().add(tabbedPane);
 
 		JPanel panel = new JPanel();
@@ -88,6 +92,65 @@ public class CRUDView {
 		panel3.setLayout(null);
 		JPanel panel4 = new JPanel();
 		tabbedPane.addTab("Deletar Vendedores", null, panel4, null);
+		panel4.setLayout(null);
+		JPanel panel5 = new JPanel();
+		tabbedPane.addTab("Adicionar Departamentos", null, panel5, null);
+		panel5.setLayout(null);
+		JPanel panel6 = new JPanel();
+		tabbedPane.addTab("Atualizar Departamentos", null, panel6, null);
+		panel6.setLayout(null);
+		
+		JLabel lblNameDepartment3 = new JLabel("Nome:");
+		lblNameDepartment3.setBounds(10, 59, 46, 14);
+		panel6.add(lblNameDepartment3);
+		
+		tfNameDepartment4 = new JTextField();
+		tfNameDepartment4.setBounds(61, 56, 140, 20);
+		panel6.add(tfNameDepartment4);
+		tfNameDepartment4.setColumns(10);
+		
+		JLabel lblIdDepartment2 = new JLabel("ID:");
+		lblIdDepartment2.setBounds(10, 23, 46, 14);
+		panel6.add(lblIdDepartment2);
+		
+		textField = new JTextField();
+		textField.setBounds(61, 20, 140, 20);
+		panel6.add(textField);
+		textField.setColumns(10);
+		
+		JButton btnUpdateDepartment = new JButton("Atualizar");
+		btnUpdateDepartment.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnUpdateDepartment.setBounds(229, 34, 89, 23);
+		panel6.add(btnUpdateDepartment);
+		panel5.setLayout(null);
+		
+		JLabel lblNameDepartment2 = new JLabel("Nome:");
+		lblNameDepartment2.setBounds(10, 28, 46, 14);
+		panel5.add(lblNameDepartment2);
+		
+		tfNameDepartment3 = new JTextField();
+		tfNameDepartment3.setBounds(56, 25, 130, 20);
+		panel5.add(tfNameDepartment3);
+		tfNameDepartment3.setColumns(10);
+		
+		JButton btnAddDepartment = new JButton("Adicionar");
+		btnAddDepartment.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DepartmentDAO dao = DaoFactory.createDepartmentDAO();
+				try {
+					Department d = new Department(null, tfNameDepartment3.getText());
+					dao.insert(d);
+					JOptionPane.showMessageDialog(null, "Departamento adicionado com sucesso!");
+				} catch(IllegalArgumentException ex) {
+					JOptionPane.showMessageDialog(null, ex.getMessage());
+				}
+			}
+		});
+		btnAddDepartment.setBounds(210, 24, 89, 23);
+		panel5.add(btnAddDepartment);
 		panel4.setLayout(null);
 		
 		tfId3 = new JTextField();
