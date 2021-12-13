@@ -20,11 +20,7 @@ public class Department implements Serializable{
 		return id;
 	}
 	
-	public void setId(Integer id) {
-		if(id < 0 || id == null) {
-			throw new IllegalArgumentException("ID invalido!");
-		}
-		
+	public void setId(Integer id) {	
 		this.id = id;
 	}
 	
