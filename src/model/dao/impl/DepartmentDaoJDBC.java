@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import db.DB;
@@ -54,7 +55,7 @@ public class DepartmentDaoJDBC implements DepartmentDAO {
 					+ "SET nameDepartment = ? "
 					+ "WHERE idDepartment = ?");
 			st.setString(1, d.getName());
-			st.setInt(1, d.getId());
+			st.setInt(2, d.getId());
 			st.executeUpdate();
 		} catch(SQLException e) {
 			throw new DbException(e.getMessage());
@@ -66,20 +67,74 @@ public class DepartmentDaoJDBC implements DepartmentDAO {
 
 	@Override
 	public void deleteByID(Integer id) {
-		// TODO Auto-generated method stub
-
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("DELETE FROM department WHERE idDepartment = ?");
+			st.setInt(1, id);
+			st.executeUpdate();
+		} catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+		}
 	}
 
 	@Override
 	public Department findByID(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT * \r\n"
+					+ "FROM department \r\n"
+					+ "WHERE department.idDepartment = ?");
+			st.setInt(1, id);
+			rs = st.executeQuery();
+			
+			if(rs.next()) {
+				Department dep = instantiateDepartment(rs);
+				return dep;
+			}
+			
+			return null;
+		} catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+	}
+	
+	public Department instantiateDepartment(ResultSet rs) throws SQLException {
+		Department dep = new Department();
+		dep.setId(rs.getInt("idDepartment"));
+		dep.setName(rs.getString("nameDepartment"));
+		return dep;
 	}
 
 	@Override
 	public List<Department> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT *\r\n"
+					+ "FROM department\r\n"
+					+ "ORDER BY nameDepartment");
+			rs = st.executeQuery();
+			
+			ArrayList<Department> departments = new ArrayList<>();
+			
+			while(rs.next()) {
+				Department dep = instantiateDepartment(rs);
+				departments.add(dep);
+			}
+			
+			return departments;
+		} catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
 	}
 
 }

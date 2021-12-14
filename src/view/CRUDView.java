@@ -32,7 +32,7 @@ public class CRUDView {
 	private JTextField tfBirthDate;
 	private JTextField tfBaseSalary;
 	private JTextField tfIdDepartmentAdd;
-	private JTextField tfNameDepartment;
+	private JTextField tfNameDepartment1;
 	private JTextField tfId2;
 	private JTextField tfName2;
 	private JTextField tfEmail2;
@@ -43,7 +43,9 @@ public class CRUDView {
 	private JTextField tfId3;
 	private JTextField tfNameDepartment3;
 	private JTextField tfNameDepartment4;
-	private JTextField textField;
+	private JTextField tfIdDepartment4;
+	private JTextField tfIdDepartment5;
+	private JTextField tfIdDepartment6;
 
 	/**
 	 * Launch the application.
@@ -73,12 +75,12 @@ public class CRUDView {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 662, 514);
+		frame.setBounds(100, 100, 682, 514);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 646, 475);
+		tabbedPane.setBounds(0, 0, 666, 475);
 		frame.getContentPane().add(tabbedPane);
 
 		JPanel panel = new JPanel();
@@ -99,6 +101,75 @@ public class CRUDView {
 		JPanel panel6 = new JPanel();
 		tabbedPane.addTab("Atualizar Departamentos", null, panel6, null);
 		panel6.setLayout(null);
+		JPanel panel7 = new JPanel();
+		tabbedPane.addTab("Consultar Departamentos", null, panel7, null);
+		panel7.setLayout(null);
+		JPanel panel8 = new JPanel();
+		tabbedPane.addTab("Deletar Departamentos", null, panel8, null);
+		panel8.setLayout(null);
+		
+		JLabel lblIdDepartment4 = new JLabel("ID:");
+		lblIdDepartment4.setBounds(20, 22, 46, 14);
+		panel8.add(lblIdDepartment4);
+		
+		tfIdDepartment6 = new JTextField();
+		tfIdDepartment6.setBounds(54, 19, 86, 20);
+		panel8.add(tfIdDepartment6);
+		tfIdDepartment6.setColumns(10);
+		
+		JButton btnDeleteDepartment = new JButton("Deletar");
+		btnDeleteDepartment.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DepartmentDAO dao = DaoFactory.createDepartmentDAO();
+				if(!tfIdDepartment6.getText().isEmpty()) {
+					dao.deleteByID(Integer.parseInt(tfIdDepartment6.getText()));
+					JOptionPane.showMessageDialog(null, "Departamento deletado com sucesso!");
+				} else {
+					JOptionPane.showMessageDialog(null, "Erro inesperado, verifique os campos e tente novamente.");
+				}
+			}
+		});
+		btnDeleteDepartment.setBounds(171, 18, 89, 23);
+		panel8.add(btnDeleteDepartment);
+		
+		JLabel lblIdDepartment3 = new JLabel("ID:");
+		lblIdDepartment3.setBounds(10, 11, 46, 14);
+		panel7.add(lblIdDepartment3);
+		
+		tfIdDepartment5 = new JTextField();
+		tfIdDepartment5.setBounds(45, 8, 86, 20);
+		panel7.add(tfIdDepartment5);
+		tfIdDepartment5.setColumns(10);
+		
+		JButton btnSearchDepartment = new JButton("Pesquisar");
+		btnSearchDepartment.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DepartmentDAO dao = DaoFactory.createDepartmentDAO();
+				try {
+					Department dep = dao.findByID(Integer.parseInt(tfIdDepartment5.getText()));
+					JOptionPane.showMessageDialog(null, dep);
+				} catch(IllegalArgumentException ex) {
+					JOptionPane.showMessageDialog(null, "Erro de input! Verifique o ID do departamento.");
+				}
+			}
+		});
+		btnSearchDepartment.setBounds(158, 7, 96, 23);
+		panel7.add(btnSearchDepartment);
+		
+		JButton btnSearchDepartment2 = new JButton("Mostrar Todos");
+		btnSearchDepartment2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DepartmentDAO dao = DaoFactory.createDepartmentDAO();
+				String departments = "Departamentos: ";
+				
+				for(Department dep : dao.findAll()) {
+					departments += "\n-> " + dep;
+				}
+				JOptionPane.showMessageDialog(null, departments);
+			}
+		});
+		btnSearchDepartment2.setBounds(10, 48, 124, 48);
+		panel7.add(btnSearchDepartment2);
 		
 		JLabel lblNameDepartment3 = new JLabel("Nome:");
 		lblNameDepartment3.setBounds(10, 59, 46, 14);
@@ -113,14 +184,27 @@ public class CRUDView {
 		lblIdDepartment2.setBounds(10, 23, 46, 14);
 		panel6.add(lblIdDepartment2);
 		
-		textField = new JTextField();
-		textField.setBounds(61, 20, 140, 20);
-		panel6.add(textField);
-		textField.setColumns(10);
+		tfIdDepartment4 = new JTextField();
+		tfIdDepartment4.setBounds(61, 20, 140, 20);
+		panel6.add(tfIdDepartment4);
+		tfIdDepartment4.setColumns(10);
 		
 		JButton btnUpdateDepartment = new JButton("Atualizar");
 		btnUpdateDepartment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				DepartmentDAO dao = DaoFactory.createDepartmentDAO();
+				try {
+					Department d = dao.findByID(Integer.parseInt(tfIdDepartment4.getText()));
+					if(!tfNameDepartment4.getText().isEmpty()) {
+						d.setName(tfNameDepartment4.getText());
+						dao.update(d);
+						JOptionPane.showMessageDialog(null, "Departamento atualizado com sucesso!");
+					} else {
+						JOptionPane.showMessageDialog(null, "Preencha o novo nome do departamento!");
+					}
+				} catch(IllegalArgumentException ex) {
+					JOptionPane.showMessageDialog(null, "Erro inesperado, verifique os campos e tente novamente.");
+				}
 			}
 		});
 		btnUpdateDepartment.setBounds(229, 34, 89, 23);
@@ -139,13 +223,13 @@ public class CRUDView {
 		JButton btnAddDepartment = new JButton("Adicionar");
 		btnAddDepartment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DepartmentDAO dao = DaoFactory.createDepartmentDAO();
-				try {
+				if(!tfNameDepartment3.getText().isEmpty()) {
+					DepartmentDAO dao = DaoFactory.createDepartmentDAO();
 					Department d = new Department(null, tfNameDepartment3.getText());
 					dao.insert(d);
 					JOptionPane.showMessageDialog(null, "Departamento adicionado com sucesso!");
-				} catch(IllegalArgumentException ex) {
-					JOptionPane.showMessageDialog(null, ex.getMessage());
+				} else {
+					JOptionPane.showMessageDialog(null, "Erro inesperado, verifique os campos e tente novamente.");
 				}
 			}
 		});
@@ -166,8 +250,12 @@ public class CRUDView {
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SellerDAO dao = DaoFactory.createSellerDAO();
-				dao.deleteByID(Integer.parseInt(tfId3.getText()));
-				JOptionPane.showMessageDialog(null, "Vendedor deletado com sucesso!");
+				if(!tfId3.getText().isEmpty()) {
+					dao.deleteByID(Integer.parseInt(tfId3.getText()));
+					JOptionPane.showMessageDialog(null, "Vendedor deletado com sucesso!");
+				} else {
+					JOptionPane.showMessageDialog(null, "Erro inesperado, verifique os campos e tente novamente.");
+				}
 			}
 		});
 		btnDelete.setBounds(174, 10, 89, 23);
@@ -282,7 +370,7 @@ public class CRUDView {
 								"Dados atualizados!");
 					}
 				} catch (IllegalArgumentException | ParseException ex) {
-					JOptionPane.showMessageDialog(null, ex.getMessage());
+					JOptionPane.showMessageDialog(null, "Erro inesperado, verifique os campos e tente novamente.");
 				}
 			}
 		});
@@ -335,21 +423,21 @@ public class CRUDView {
 		lblIdDepartment.setBounds(10, 132, 124, 14);
 		panel2.add(lblIdDepartment);
 
-		tfNameDepartment = new JTextField();
-		tfNameDepartment.setBounds(160, 160, 163, 20);
-		panel2.add(tfNameDepartment);
-		tfNameDepartment.setColumns(10);
+		tfNameDepartment1 = new JTextField();
+		tfNameDepartment1.setBounds(160, 160, 163, 20);
+		panel2.add(tfNameDepartment1);
+		tfNameDepartment1.setColumns(10);
 
-		JLabel lblNameDepartment = new JLabel("Nome do departamento:");
-		lblNameDepartment.setBounds(10, 163, 145, 14);
-		panel2.add(lblNameDepartment);
+		JLabel lblNameDepartment1 = new JLabel("Nome do departamento:");
+		lblNameDepartment1.setBounds(10, 163, 145, 14);
+		panel2.add(lblNameDepartment1);
 
 		JButton btnNewButton = new JButton("Inserir");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					Department dep = new Department(Integer.parseInt(tfIdDepartmentAdd.getText()),
-							tfNameDepartment.getText());
+							tfNameDepartment1.getText());
 					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 					SellerDAO dao = DaoFactory.createSellerDAO();
 					Seller seller = new Seller(null, tfName.getText(), tfEmail.getText(),
@@ -357,7 +445,7 @@ public class CRUDView {
 					dao.insert(seller);
 					JOptionPane.showMessageDialog(null, "Vendedor adicionado com sucesso!");
 				} catch (IllegalArgumentException | ParseException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage());
+					JOptionPane.showMessageDialog(null, "Erro inesperado, verifique os campos e tente novamente.");
 				}
 
 			}
@@ -372,7 +460,7 @@ public class CRUDView {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					SellerDAO dao = DaoFactory.createSellerDAO();
-					String sellers = "Sellers: ";
+					String sellers = "Vendedores: ";
 
 					if (!dao.findAll().isEmpty()) {
 						for (Seller s : dao.findAll()) {
@@ -388,7 +476,7 @@ public class CRUDView {
 				}
 			}
 		});
-		btnFindAll.setBounds(24, 91, 119, 48);
+		btnFindAll.setBounds(24, 79, 119, 48);
 		panel.add(btnFindAll);
 
 		JButton btnSearch = new JButton("Pesquisar");
@@ -403,7 +491,7 @@ public class CRUDView {
 						JOptionPane.showMessageDialog(null, "Nenhum vendedor encontrado!");
 					}
 				} catch (IllegalArgumentException ex) {
-					JOptionPane.showMessageDialog(null, ex.getMessage());
+					JOptionPane.showMessageDialog(null, "Erro de input! Verifique o campo de ID.");
 				}
 			}
 		});
@@ -425,7 +513,7 @@ public class CRUDView {
 
 		tfIdDepartment = new JTextField();
 		tfIdDepartment.setColumns(10);
-		tfIdDepartment.setBounds(152, 51, 98, 20);
+		tfIdDepartment.setBounds(143, 51, 98, 20);
 		panel.add(tfIdDepartment);
 
 		JButton btnSearch2 = new JButton("Pesquisar");
@@ -446,12 +534,12 @@ public class CRUDView {
 						JOptionPane.showMessageDialog(null, "Nenhum vendedor encontrado!");
 					}
 				} catch (IllegalArgumentException ex) {
-					JOptionPane.showMessageDialog(null, ex.getMessage());
+					JOptionPane.showMessageDialog(null, "Erro de input! Verifique o ID do departamento.");
 				}
 
 			}
 		});
-		btnSearch2.setBounds(260, 50, 105, 23);
+		btnSearch2.setBounds(269, 50, 105, 23);
 		panel.add(btnSearch2);
 	}
 }
