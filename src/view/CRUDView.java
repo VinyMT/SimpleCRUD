@@ -122,8 +122,12 @@ public class CRUDView {
 			public void actionPerformed(ActionEvent e) {
 				DepartmentDAO dao = DaoFactory.createDepartmentDAO();
 				if(!tfIdDepartment6.getText().isEmpty()) {
-					dao.deleteByID(Integer.parseInt(tfIdDepartment6.getText()));
-					JOptionPane.showMessageDialog(null, "Departamento deletado com sucesso!");
+					try {
+						dao.deleteByID(Integer.parseInt(tfIdDepartment6.getText()));
+						JOptionPane.showMessageDialog(null, "Departamento deletado com sucesso!");
+					} catch(IllegalArgumentException ex) {
+						JOptionPane.showMessageDialog(null, "Erro inesperado, verifique os campos e tente novamente.");
+					}
 				} else {
 					JOptionPane.showMessageDialog(null, "Erro inesperado, verifique os campos e tente novamente.");
 				}
@@ -251,8 +255,12 @@ public class CRUDView {
 			public void actionPerformed(ActionEvent e) {
 				SellerDAO dao = DaoFactory.createSellerDAO();
 				if(!tfId3.getText().isEmpty()) {
-					dao.deleteByID(Integer.parseInt(tfId3.getText()));
-					JOptionPane.showMessageDialog(null, "Vendedor deletado com sucesso!");
+					try {
+						dao.deleteByID(Integer.parseInt(tfId3.getText()));
+						JOptionPane.showMessageDialog(null, "Vendedor deletado com sucesso!");
+					} catch(IllegalArgumentException ex) {
+						JOptionPane.showMessageDialog(null, "Erro inesperado, verifique os campos e tente novamente.");
+					}
 				} else {
 					JOptionPane.showMessageDialog(null, "Erro inesperado, verifique os campos e tente novamente.");
 				}
